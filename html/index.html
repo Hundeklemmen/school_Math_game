@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  
+  
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="https://raw.githubusercontent.com/daneden/animate.css/master/animate.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+</head>
+<body>
+  <section id="name" style="display: none;">
+      <div class="center" style="top: 40%; color: white; text-align: center; font-family: 'Geo', serif;">
+        <h1 id="usernameError" class="animated" style="font-size: 60px;" v-if="username == ''">Hej, indtast dit navn.</h1>
+        <h1 style="font-size: 60px;" v-if="username != ''">Hej, {{ username }}.</h1>
+    
+        <input style="margin-top: 150px;" v-model="username" class="form-control username" placeholder="Dit navn">
+        
+        <br>
+        <img onclick="submitName();" class="next1" src="assets/img/next.png">
+        <img style="display:none;" class="next2" src="assets/img/next2.png">
+      </div>
+  </section>
+  
+  <section id="game" style="display:none;">
+    <div class="center" style="top: 40%; color: white; text-align: center; font-family: 'Geo', serif;">
+      <span v-if="ligning != ''">
+        <h1 id="ligningERror" class="animated" style="font-size: 60px;">Løs ligningen: <br>{{ ligning }}</h1>
+      </span>
+      <span v-if="ligning == ''">
+        <h1 class="animated" style="font-size: 60px;">Du har vundet!</h1>
+        <h1 class="animated" style="font-size: 60px;">Points {{ points }}</h1>
+      </span>
+      <div class="row" v-for="(svarB, index) in svar">
+          <button style="color: black; background-color: rgba(255,255,255,0.7); width: 100px; height: 50px; font-size: 20px; margin-bottom: 10px;" type="button" v-bind:onclick="'svarTjek('+index+', '+svarB.rigtigt+', '+questionPoint+');'" class="btn btn-light">{{ svarB.svar }}</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    var namePage, gamePage, questions;
+    var question = -1;
+    setInterval(function(){
+      console.log(gamePage.points)
+    }, 1000)
+    requestQuestions(function(){
+      $(document).ready(function(){
+        namePage = new Vue({
+            el: '#name',
+            data: {
+              username: ""
+            }
+        });
+        gamePage = new Vue({
+            el: '#game',
+            data: {
+              ligning: "",
+              svar: [],
+              points: 0,
+              questionPoint: 0
+            }
+        });
+        if(!getCookie("navn")){
+          displaySection("name");
+        } else if(getCookie("navn")&&getCookie("navn") != ""){
+          displaySection("game");
+          namePage.username = getCookie("navn");
+        }
+      })
+    });
+    
+    function submitName(){
+      $(".next1").hide();
+      $(".next2").show();
+      setTimeout(function() {
+        $(".next2").hide();
+        $(".next1").show();
+      }, 150);
+      
+      if(namePage.username != ""){
+        setCookie("navn", namePage.username, 365);
+        setTimeout(function() {
+          displaySection("game");
+        }, 250);
+      } else {
+        $('#usernameError').addClass("shake");
+        setTimeout(function(){
+          $('#usernameError').removeClass("shake");
+        }, 500)
+      }
+      
+      //Gør ting når man har skrevet et navn / logget ind fra cookie
+    }
+    
+    function displaySection(page){
+      $("#name").hide();
+      $("#game").hide();
+      
+      $("#"+page).fadeIn();
+      
+      if(page == "game"){
+        question = parseInt(question + 1);
+        showQuestion(question);
+      }
+    }
+    function svarTjek(index, rigtig, questionPoint){
+      console.log(index + ": "+rigtig)
+      if(rigtig){
+        console.log(1);
+        showQuestion(parseInt(question+1))
+        question++;
+        gamePage.points = parseInt(gamePage.points + questionPoint);
+        console.log(parseInt(svar[point]));
+      } else {
+        console.log(2)
+        gamePage.points = parseInt(gamePage.points - questionPoint);
+        delete gamePage.svar[index];
+        if(gamePage.points < 0){
+          gamePage.points = 0;
+        }
+      }
+    }
+    function showQuestion(i){
+      console.log(gamePage.points);
+      if(questions[i]){
+        var show = questions[i];
+        gamePage.ligning = show.ligning;
+        gamePage.svar = show.svar;
+        gamePage.questionPoint = show.point
+      } else {
+        gamePage.ligning = "";
+        gamePage.svar = [];
+      }
+    }
+    //Request Questions
+    
+    
+    function requestQuestions(cb){
+      console.log("requesting..")
+      /*
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+             questions = JSON.parse(this.responseText);
+             console.log(questions);
+             
+          }
+      };
+      xhttp.open("GET", "/assets/questions.json", true);
+      xhttp.send();
+      */
+      $.getJSON("/assets/questions.json", function(data) {         
+          console.log(data);
+          questions = data;
+          cb();
+      });
+      
+    }
+    
+    // Temp functions
+    function setCookie(name,value,days) {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days*24*60*60*1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {   
+        document.cookie = name+'=; Max-Age=-99999999;';  
+    }
+  </script>
+</body>
+</html>
