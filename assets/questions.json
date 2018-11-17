@@ -1,0 +1,92 @@
+[
+	{
+		"ligning": "5x + 8 = -2",
+		"svar": [
+			{
+				"svar": "x=-2",
+				"rigtigt": true
+			},
+			{
+				"svar": "x=2",
+				"rigtigt": false
+			},
+			{
+				"svar": "x=4",
+				"rigtigt": false
+			}
+		],
+		"point": 10
+	},
+	{
+		"ligning": "3x + 8 = 5",
+		"svar": [
+			{
+				"svar": "x=1",
+				"rigtigt": false
+			},
+			{
+				"svar": "x=-1",
+				"rigtigt": true
+			},
+			{
+				"svar": "x=3",
+				"rigtigt": false
+			}
+		],
+		"point": 10
+	},
+	{
+		"ligning": "9x + 12 = 75",
+		"svar": [
+			{
+				"svar": "x=7",
+				"rigtigt": true
+			},
+			{
+				"svar": "x=-7",
+				"rigtigt": false
+			},
+			{
+				"svar": "x=-5",
+				"rigtigt": false
+			}
+		],
+		"point": 10
+	},
+	{
+		"ligning": "7x + 43 = 71",
+		"svar": [
+			{
+				"svar": "x=4",
+				"rigtigt": true
+			},
+			{
+				"svar": "x=5",
+				"rigtigt": false
+			},
+			{
+				"svar": "x=6",
+				"rigtigt": false
+			}
+		],
+		"point": 10
+	},
+	{
+		"ligning": "8x + 73 = 97",
+		"svar": [
+			{
+				"svar": "x=8",
+				"rigtigt": false
+			},
+			{
+				"svar": "x=2",
+				"rigtigt": false
+			},
+			{
+				"svar": "x=3",
+				"rigtigt": true
+			}
+		],
+		"point": 10
+	}
+]

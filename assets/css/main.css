@@ -1,0 +1,56 @@
+@import url(https://fonts.googleapis.com/css?family=Geo&subset=latin);
+
+body {
+	
+}
+
+.center {
+	position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+section#name {
+	height:100%;
+	width:100%;
+	position:absolute;
+	top:0;
+	left:0;
+	background:url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/0kjHIH6/animation-of-1980s-old-arcade-video-game-platform-level_vy9reo4xe__F0000.png');
+	background-size: 100% 100%;
+	background-repeat:no-repeat;
+}
+input.username {
+	  background-color: #897373;
+    border: solid 1px #897373;
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 12px 15px;
+    height: 50px;
+    border-radius: 1px;
+    margin-bottom: 25px;
+    outline: 0 !important;
+    font-style: italic;
+    -webkit-transition: all ease-in-out 0.4s;
+    transition: all ease-in-out 0.4s;
+    font-family: 'Geo', serif;
+    box-shadow:3px 3px 5px 6px #4c4b4b;
+}
+input.username:active, input.username:focus {
+  box-shadow:3px 3px 5px 6px #4c4b4b;
+  border: solid 1px #897373;
+}
+
+section#game {
+	height:100%;
+	width:100%;
+	position:absolute;
+	top:0;
+	left:0;
+	background:url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/0kjHIH6/animation-of-1980s-old-arcade-video-game-platform-level_vy9reo4xe__F0000.png');
+	background-size: 100% 100%;
+	background-repeat:no-repeat;
+}
